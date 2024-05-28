@@ -10,53 +10,55 @@ TODOS
 """
 
 class MultiPoly:
-    def __init__(num_variables):
+    def __init__(self, num_variables):
         self.num_variables = num_variables
         self.coefficients = [0]
         self.degree = 0
 
     # TODO
-    def set_coef(value,exponents):
+    def set_coef(self, value,exponents):
         pass
-    def get_coef(exponents):
+    def get_coef(self, exponents):
         return 0
 
     # TODO
-    def copy():
+    def copy(self):
         pass
 
     # operates in place
     # multiplies by other poly
     # TODO
-    def mul_poly(poly):
+    def mul_poly(self, poly):
         pass
-    def add_poly(poly):
+    def add_poly(self, poly):
         pass
 
-    def mul_const(const):
+    def mul_const(self, const):
         pass
         # must update degree potentially
 
 class KForm:
-    def __init__(num_variables):
+    def __init__(self, num_variables):
         self.num_variables = num_variables
-        self.zero_forms = [0]
+        self.zero_forms = []
+        for index in range(2**num_variables):
+            self.zero_forms.append(0)
     
     # TODO
     # zero_form: whatever function type we're working with
     # term: an array of nonnegative integers, the differentials in this term
-    def set_zero_form(zero_form,term):
+    def set_zero_form(self, zero_form,term):
         pass
-    def get_zero_form(term):
+    def get_zero_form(self,term):
         return 0
     
     # TODO
     # acts in place
-    def exterior_product(kform2):
+    def exterior_product(self,kform2):
         pass
     
     # TODO
-    def copy():
+    def copy(self):
         pass
 
 # TODO
@@ -79,4 +81,5 @@ def kform_term_index(kform_term):
 
 
 
-
+my_form = KForm(2)
+print(my_form.zero_forms)
