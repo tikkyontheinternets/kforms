@@ -58,6 +58,17 @@ def poly_term_index(poly_term):
 
 # TODO
 # return the index in a k-form array that a given term would be located at
-# kform_term: an array of nonnegative integers (the variables in this differential)
+# kform_term: an array of nonnegative integers (the variables in this differential).
+#             No repeats.
 def kform_term_index(kform_term):
-    return 0
+    final_index = 0
+    for index in range(len(kform_term)):
+        final_index += 2**kform_term[index]
+
+    return final_index
+
+
+
+
+term = [1,2]
+print(str(term) + " -> " + str(kform_term_index(term)))
