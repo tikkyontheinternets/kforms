@@ -37,6 +37,7 @@ class MultiPoly:
         pass
         # must update degree potentially
 
+# KForms are made up of variables. The variables start at ZERO.
 class KForm:
     def __init__(self, num_variables):
         self.num_variables = num_variables
@@ -47,8 +48,22 @@ class KForm:
     # TODO
     # zero_form: whatever function type we're working with
     # term: an array of nonnegative integers, the differentials in this term
-    def set_zero_form(self, zero_form,term):
-        pass
+    def set_zero_form(self,term,zero_form):
+        max_variable = 0
+        for index in range(len(term)):
+            if term[index] > max_variable:
+                max_variable = term[index]
+        if max_variable+1 > self.num_variables:
+            # situation: the term we're setting has a variable not included in the existing zero_form array.
+            # we have to extend the array.
+            new_num_variables = max_variable + 1
+            slots_to_add = 2**new_num_variables - 2**self.num_variables
+            for i in range(slots_to_add):
+                self.zero_forms.append(0)
+            self.num_variables = new_num_variables
+        # set the new zero form in there
+        self.zero_forms[kform_term_index(term)] = zero_form
+    
     def get_zero_form(self,term):
         return 0
     
@@ -79,7 +94,18 @@ def kform_term_index(kform_term):
     return final_index
 
 
-
-
-my_form = KForm(2)
+my_form = KForm(3)
 print(my_form.zero_forms)
+my_form.set_zero_form([],0)
+my_form.set_zero_form([1],1)
+my_form.set_zero_form([2],2)
+my_form.set_zero_form([1,2],12)
+my_form.set_zero_form([0],0)
+my_form.set_zero_form([0,1],10)
+my_form.set_zero_form([0,1,2],120)
+
+print(my_form.zero_forms)
+
+my_form.set_zero_form([3],69)
+print(my_form.zero_forms)
+
