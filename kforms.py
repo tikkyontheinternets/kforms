@@ -45,7 +45,9 @@ class KForm:
         for index in range(2**num_variables):
             self.zero_forms.append(0)
     
-    # TODO
+    def __str__(self):
+        return "baby"
+
     # zero_form: whatever function type we're working with
     # term: an array of nonnegative integers, the differentials in this term
     def set_zero_form(self,term,zero_form):
@@ -76,6 +78,20 @@ class KForm:
     def copy(self):
         pass
 
+# the reverse of kform_term_index: converts a single number to an array of numbers representing the variables in that term.
+# index: a nonnegative integer
+# return: an array of nonnegative integers
+def kform_index_to_vars(index):
+    variables = []
+    exponent = 0
+    while (index > 0):
+        if (index % 2**(exponent+1)) >= (2**exponent):
+            variables.append(exponent)
+            index -= index % (2**(exponent+1))
+        exponent += 1
+    return variables
+
+
 # TODO
 # return the index in a multipoly array that a given term would be located at
 # poly_term: an array of positive integers, the exponents of the variables
@@ -94,18 +110,7 @@ def kform_term_index(kform_term):
     return final_index
 
 
-my_form = KForm(3)
-print(my_form.zero_forms)
-my_form.set_zero_form([],0)
-my_form.set_zero_form([1],1)
-my_form.set_zero_form([2],2)
-my_form.set_zero_form([1,2],12)
-my_form.set_zero_form([0],0)
-my_form.set_zero_form([0,1],10)
-my_form.set_zero_form([0,1,2],120)
 
-print(my_form.zero_forms)
-
-my_form.set_zero_form([3],69)
-print(my_form.zero_forms)
+for index in range(20):
+    print(str(index) + " -> " + str(kform_index_to_vars(index)))
 
