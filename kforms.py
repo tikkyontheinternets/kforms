@@ -44,9 +44,19 @@ class KForm:
         self.zero_forms = []
         for index in range(2**num_variables):
             self.zero_forms.append(0)
-    
+   
+   # TODO improve this
     def __str__(self):
-        return "baby"
+        result = ""
+        for index in range(len(self.zero_forms)):
+            if self.zero_forms[index] != 0: # TODO:change for polynomials??
+                if result != "":
+                    result += " + "
+                result += kform_term_to_string(self,index)
+        if result == "":
+            return "0"
+        else:
+            return result
 
     # zero_form: whatever function type we're working with
     # term: an array of nonnegative integers, the differentials in this term
@@ -67,7 +77,11 @@ class KForm:
         self.zero_forms[kform_term_index(term)] = zero_form
     
     def get_zero_form(self,term):
-        return 0
+        term_index = kform_term_index(term)
+        if term_index+1 >= len(self.zero_forms):
+            return 0 # TODO change if poly???
+        else:
+            return self.zero_forms[term_index]
     
     # TODO
     # acts in place
@@ -77,6 +91,18 @@ class KForm:
     # TODO
     def copy(self):
         pass
+
+# takes a term from a kform and returns a string representation of it
+# (assumes the term is nonzero)
+def kform_term_to_string(kform,term_index):
+    term_vars = kform_index_to_vars(term_index)
+    return_string = ""
+    return_string += str(kform.get_zero_form(term_vars))
+    
+    for index in range(len(term_vars)):
+        return_string += "*d_" + str(term_vars[index])
+
+    return return_string
 
 # the reverse of kform_term_index: converts a single number to an array of numbers representing the variables in that term.
 # index: a nonnegative integer
@@ -110,7 +136,20 @@ def kform_term_index(kform_term):
     return final_index
 
 
+forms = []
+num_forms = 7
 
-for index in range(20):
-    print(str(index) + " -> " + str(kform_index_to_vars(index)))
+for i in range(num_forms):
+    forms.append(KForm(3))
 
+
+forms[0].set_zero_form([],1)
+forms[1].set_zero_form([],1)
+forms[1].set_zero_form([2],5)
+forms[2].set_zero_form([],1)
+forms[2].set_zero_form([2],5)
+forms[2].set_zero_form([2,1],5)
+
+
+for i in range(len(forms)):
+    print(forms[i])
