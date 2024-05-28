@@ -49,6 +49,15 @@ class KForm:
         pass
     def get_zero_form(term):
         return 0
+    
+    # TODO
+    # acts in place
+    def exterior_product(kform2):
+        pass
+    
+    # TODO
+    def copy():
+        pass
 
 # TODO
 # return the index in a multipoly array that a given term would be located at
@@ -56,7 +65,7 @@ class KForm:
 def poly_term_index(poly_term):
     return 0
 
-# TODO
+
 # return the index in a k-form array that a given term would be located at
 # kform_term: an array of nonnegative integers (the variables in this differential).
 #             No repeats.
@@ -70,5 +79,4 @@ def kform_term_index(kform_term):
 
 
 
-term = [1,2]
-print(str(term) + " -> " + str(kform_term_index(term)))
+
