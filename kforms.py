@@ -8,7 +8,7 @@ class MultiPoly:
     def __init__(self, num_variables):
         self.num_variables = num_variables
         self.coefficients = [0]
-        self.degree = 0
+        self.max_degree = 0
 
     # TODO
     def set_coef(self, value,exponents):
@@ -39,16 +39,47 @@ class MultiPoly:
     def derivative(self,variable):
         pass
 
-# PROBLEM: the two following functions might need you to specify the dimension?
+# like triangle numbers but for higher dimensions
+# (I worked out the formula by browsing wikipedia)
+def n_simplex_number(number_of_dimensions,side_length):
+    numerator = 1
+    for i in range(number_of_dimensions):
+        numerator *= side_length + i
+    denominator = math.factorial(number_of_dimensions)
+    return numerator/denominator
 
 # TODO
 # take in an array of exponents and spit out the index in the multipoly array their coefficient would appear at
-def multipoly_term_to_index(exponents):
-    return 0
+# dimension: the num of variables in the multivariable polynomial
+# exponents: an array of nonnegative integers, the exponents on the desired term
+def multipoly_term_to_index(dimension, exponents):
+    # if exponents is all zero, return zero
+    all_zero = True
+    for i in range(len(exponents)):
+        if exponents[i] != 0:
+            all_zero = False
+    if all_zero:
+        return 0
+
+    # compute the degree of this term
+    degree = 0
+    for i in range(len(exponents)):
+        degree += exponents[i]
+
+    # figure out how many entries there are "beneath" it in the simplex (using n_simplex_number)
+    entries_before_this = n_simplex_number(dimension,degree)
+
+    # recurse on just the "side" it's on 
+    exponents.pop(0)
+    final_index = entries_before_this + multipoly_term_to_index(dimension-1,exponents)
+
+    return final_index
 
 # TODO
 # take in a number representing an index in a multipoly array, and spit out an array of exponents from the term that coefficient comes with.
-def multipoly_index_to_term(index):
+# dimension: the num of variables in the multivariable polynomial
+# index: a nonnegative integer, the index of the desired term.
+def multipoly_index_to_term(dimension, index):
     return []
 
 # KForms are made up of variables. The variables start at ZERO.
@@ -138,15 +169,6 @@ def kform_term_to_index(kform_term):
 
 
 
-# TODO
-# like triangle numbers but for higher dimensions
-# (I worked out the formula by browsing wikipedia)
-def n_simplex_number(number_of_dimensions,side_length):
-    numerator = 1
-    for i in range(number_of_dimensions):
-        numerator *= side_length + i
-    denominator = math.factorial(number_of_dimensions)
-    return numerator/denominator
 
 # takes a term from a kform and returns a string representation of it
 # (assumes the term is nonzero)
@@ -161,7 +183,41 @@ def kform_term_to_string(kform,term_index):
     return return_string
 
 
+###########################################
+#             TEST     ZONE               #
+###########################################
+
+# generate all exponents in 3d with side length 3 (degree <3) (basically a [dimension]-cube)
+side_length = 4
+max_degree = 3
+dimension = 3
+all_exponent_combos = [[]]
+for dimension_index in range(dimension):
+    new_combos = []
+    for combo_index in range(len(all_exponent_combos)):
+        for side_index in range(side_length):
+            current_combo = all_exponent_combos[combo_index].copy()
+            current_combo.append(side_index)
+            new_combos.append(current_combo)
+    all_exponent_combos = new_combos
+
+# remove all entries with degree above max_degree (to make it a simplex type thing)
+combo_index = 0
+while combo_index < len(all_exponent_combos):
+    degree = 0
+    for exponent_index in range(len(all_exponent_combos[combo_index])):
+        degree += all_exponent_combos[combo_index][exponent_index]
+    if degree > max_degree:
+        all_exponent_combos.pop(combo_index)
+    else:
+        combo_index += 1
 
 
-for side_length in range(10):
-    print(str(side_length) + " -> " + str(n_simplex_number(4,side_length)))
+
+for i in range(len(all_exponent_combos)):
+    print(str(all_exponent_combos[i]) + " -> " + str(multipoly_term_to_index(dimension,all_exponent_combos[i])))
+#    print(all_exponent_combos[i])
+
+# multipoly_term_to_index
+
+
