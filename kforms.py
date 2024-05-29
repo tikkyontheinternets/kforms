@@ -1,13 +1,5 @@
+import math
 
-
-
-"""
-TODOS
-- create a git repo for this file
-- reimplement polynomials but multivariate
-- implement a way to show off and construct k-forms (with integer coefficients)
-
-"""
 
 # TODO rename the functions that enumerate terms in a consistent way
 # TODO change the in-place operations into ones that return new objects?
@@ -27,6 +19,8 @@ class MultiPoly:
     # TODO
     def copy(self):
         pass
+
+    # alt TODO: change these to raw __mul__ and __add__ etc
 
     # operates in place
     # multiplies by other poly
@@ -113,8 +107,13 @@ def multipoly_term_index(exponents):
 
 # TODO
 # like triangle numbers but for higher dimensions
+# (I worked out the formula by browsing wikipedia)
 def n_simplex_number(number_of_dimensions,side_length):
-    return 0
+    numerator = 1
+    for i in range(number_of_dimensions):
+        numerator *= side_length + i
+    denominator = math.factorial(number_of_dimensions)
+    return numerator/denominator
 
 # takes a term from a kform and returns a string representation of it
 # (assumes the term is nonzero)
@@ -160,20 +159,6 @@ def kform_term_index(kform_term):
     return final_index
 
 
-forms = []
-num_forms = 7
 
-for i in range(num_forms):
-    forms.append(KForm(3))
-
-
-forms[0].set_zero_form([],1)
-forms[1].set_zero_form([],1)
-forms[1].set_zero_form([2],5)
-forms[2].set_zero_form([],1)
-forms[2].set_zero_form([2],5)
-forms[2].set_zero_form([2,1],5)
-
-
-for i in range(len(forms)):
-    print(forms[i])
+for side_length in range(10):
+    print(str(side_length) + " -> " + str(n_simplex_number(4,side_length)))
