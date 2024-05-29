@@ -9,6 +9,9 @@ TODOS
 
 """
 
+# TODO rename the functions that enumerate terms in a consistent way
+# TODO change the in-place operations into ones that return new objects?
+
 class MultiPoly:
     def __init__(self, num_variables):
         self.num_variables = num_variables
@@ -36,6 +39,12 @@ class MultiPoly:
     def mul_const(self, const):
         pass
         # must update degree potentially
+
+    # TODO
+    # variable is the number identifying the variable we're taking the derivative with respect to 
+    def derivative(self,variable):
+        pass
+
 
 # KForms are made up of variables. The variables start at ZERO.
 class KForm:
@@ -87,10 +96,25 @@ class KForm:
     # acts in place
     def exterior_product(self,kform2):
         pass
+
+    # TODO
+    # acts in place, takes this k-form and turns it into a (k+1)-form
+    def exterior_derivative(self):
+        pass
     
     # TODO
     def copy(self):
         pass
+
+# TODO
+# take in an array of exponents and spit out the index in the multipoly array their coefficient would appear at
+def multipoly_term_index(exponents):
+    return 0
+
+# TODO
+# like triangle numbers but for higher dimensions
+def n_simplex_number(number_of_dimensions,side_length):
+    return 0
 
 # takes a term from a kform and returns a string representation of it
 # (assumes the term is nonzero)
