@@ -39,6 +39,17 @@ class MultiPoly:
     def derivative(self,variable):
         pass
 
+# PROBLEM: the two following functions might need you to specify the dimension?
+
+# TODO
+# take in an array of exponents and spit out the index in the multipoly array their coefficient would appear at
+def multipoly_term_to_index(exponents):
+    return 0
+
+# TODO
+# take in a number representing an index in a multipoly array, and spit out an array of exponents from the term that coefficient comes with.
+def multipoly_index_to_term(index):
+    return []
 
 # KForms are made up of variables. The variables start at ZERO.
 class KForm:
@@ -77,10 +88,10 @@ class KForm:
                 self.zero_forms.append(0)
             self.num_variables = new_num_variables
         # set the new zero form in there
-        self.zero_forms[kform_term_index(term)] = zero_form
+        self.zero_forms[kform_term_to_index(term)] = zero_form
     
     def get_zero_form(self,term):
-        term_index = kform_term_index(term)
+        term_index = kform_term_to_index(term)
         if term_index+1 >= len(self.zero_forms):
             return 0 # TODO change if poly???
         else:
@@ -100,10 +111,32 @@ class KForm:
     def copy(self):
         pass
 
-# TODO
-# take in an array of exponents and spit out the index in the multipoly array their coefficient would appear at
-def multipoly_term_index(exponents):
-    return 0
+
+# the reverse of kform_term_to_index: converts a single number to an array of numbers representing the variables in that term.
+# index: a nonnegative integer
+# return: an array of nonnegative integers
+def kform_index_to_term(index):
+    variables = []
+    exponent = 0
+    while (index > 0):
+        if (index % 2**(exponent+1)) >= (2**exponent):
+            variables.append(exponent)
+            index -= index % (2**(exponent+1))
+        exponent += 1
+    return variables
+
+
+# return the index in a k-form array that a given term would be located at
+# kform_term: an array of nonnegative integers (the variables in this differential).
+#             No repeats.
+def kform_term_to_index(kform_term):
+    final_index = 0
+    for index in range(len(kform_term)):
+        final_index += 2**kform_term[index]
+
+    return final_index
+
+
 
 # TODO
 # like triangle numbers but for higher dimensions
@@ -118,7 +151,7 @@ def n_simplex_number(number_of_dimensions,side_length):
 # takes a term from a kform and returns a string representation of it
 # (assumes the term is nonzero)
 def kform_term_to_string(kform,term_index):
-    term_vars = kform_index_to_vars(term_index)
+    term_vars = kform_index_to_term(term_index)
     return_string = ""
     return_string += str(kform.get_zero_form(term_vars))
     
@@ -127,36 +160,6 @@ def kform_term_to_string(kform,term_index):
 
     return return_string
 
-# the reverse of kform_term_index: converts a single number to an array of numbers representing the variables in that term.
-# index: a nonnegative integer
-# return: an array of nonnegative integers
-def kform_index_to_vars(index):
-    variables = []
-    exponent = 0
-    while (index > 0):
-        if (index % 2**(exponent+1)) >= (2**exponent):
-            variables.append(exponent)
-            index -= index % (2**(exponent+1))
-        exponent += 1
-    return variables
-
-
-# TODO
-# return the index in a multipoly array that a given term would be located at
-# poly_term: an array of positive integers, the exponents of the variables
-def poly_term_index(poly_term):
-    return 0
-
-
-# return the index in a k-form array that a given term would be located at
-# kform_term: an array of nonnegative integers (the variables in this differential).
-#             No repeats.
-def kform_term_index(kform_term):
-    final_index = 0
-    for index in range(len(kform_term)):
-        final_index += 2**kform_term[index]
-
-    return final_index
 
 
 
