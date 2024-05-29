@@ -1,7 +1,6 @@
 import math
 
 
-# TODO rename the functions that enumerate terms in a consistent way
 # TODO change the in-place operations into ones that return new objects?
 
 class MultiPoly:
@@ -10,15 +9,52 @@ class MultiPoly:
         self.coefficients = [0]
         self.max_degree = 0
 
+# TODO test getter and setter here
+
     # TODO
     def set_coef(self, value,exponents):
-        pass
+        # do multipoly_term_to_index(exponents)
+        index = multipoly_term_to_index(self.num_variables,exponents)
+
+        # if value is nonzero:
+        # ask if the new index is inside the current array
+        # if not, expend the array to include this
+        if value != 0:
+            if index+1 <= len(self.coefficients):
+                self.coefficients[index] = value
+            else:
+                #expand
+                # TODO
+                pass
+
+        # if value is zero:
+        # if inside current array:
+        #   figure out if it's the highest nonzero entry, maybe shrink the array
+        #   if it's not the highest nonzero entry, do nothing
+        # if not inside current array:
+        #   do nothing lol
+        else:
+            if index+1 <= len(self.coefficients):
+                #figure out if highest nonzero entry
+                # TODO
+                pass
+            else:
+                pass
+
+    # TODO        
     def get_coef(self, exponents):
-        return 0
+        index = multipoly_term_to_index(self.num_variables, exponents)
+        if len(self.coefficients) <= index+1:
+            return 0
+        else:
+            return self.coefficients[index]
 
     # TODO
     def copy(self):
-        pass
+        new_poly = MultiPoly(self.num_variables)
+        new_poly.coefficients = self.coefficients.copy()
+        new_poly.max_degree = self.max_degree
+        return new_poly
 
     # alt TODO: change these to raw __mul__ and __add__ etc
 
@@ -38,6 +74,7 @@ class MultiPoly:
     # variable is the number identifying the variable we're taking the derivative with respect to 
     def derivative(self,variable):
         pass
+
 
 # like triangle numbers but for higher dimensions
 # (I worked out the formula by browsing wikipedia)
