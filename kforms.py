@@ -13,49 +13,10 @@ class MultiPoly:
     def __str__(self):
         return str(self.coefficients)
 
-# TODO test getter and setter here
-
     # TODO
     # note: maybe have it such that unless the entire polynomial is zero, the entry with the largest index is always nonzero?  
-    def set_coef(self, value,exponents):
-        # do multipoly_term_to_index(exponents)
-        index = multipoly_term_to_index(self.num_variables,exponents)
-        degree = 0
-        for exponent_index in range(len(exponents)):
-            degree += exponents[exponent_index]
-
-        # if value is nonzero:
-        #   ask if the new index is inside the current array
-        #   if not, expend the array to include this
-        if value != 0:
-            if self.max_degree < degree:
-                self.max_degree = degree
-            if index+1 <= len(self.coefficients):
-                self.coefficients[index] = value
-            else:
-                #expand
-                new_index = len(self.coefficients)
-                while new_index <= index:
-                    if new_index == index:
-                        self.coefficients.append(value)
-                    else:
-                        self.coefficients.append(0)
-                    new_index += 1
-
-        # if value is zero:
-        #   if inside current array:
-        #     figure out if it's the highest nonzero entry, maybe shrink the array
-        #     if it's not the highest nonzero entry, do nothing
-        #   if not inside current array:
-        #     do nothing lol
-        else:
-            if index+1 <= len(self.coefficients):
-                #figure out if highest nonzero entry
-                # TODO
-
-                pass
-            else:
-                pass
+    def set_coef(self, value, exponents):
+        pass
 
     # TODO        
     def get_coef(self, exponents):
