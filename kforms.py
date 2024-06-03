@@ -199,7 +199,7 @@ def kform_term_to_string(kform,term_index):
 ###########################################
 #             TEST     ZONE               #
 ###########################################
-
+"""
 # generate all exponents in 3d with side length 3 (degree <3) (basically a [dimension]-cube)
 side_length = 4
 max_degree = 3
@@ -233,4 +233,4 @@ for i in range(len(all_exponent_combos)):
 
 # multipoly_term_to_index
 
-
+"""
