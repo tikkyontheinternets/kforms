@@ -6,8 +6,10 @@ import kforms
 ###########################################
 
 # other test ideas
-# - take the below stuff and, for a number of different sizes of potential polynomial, check that the generated indices are all unique and shit
-
+    # test that the terms of a polynomial are always sorted by degree?? I'm not sure if this is the case but i wanna check
+    # test that the largest element of a multipoly is always nonzero
+    # test set_coef:
+        # a test for every case
 
 def test_multipoly_term_to_index(max_degree,dimension):
     # generate all exponents in 3d with side length 3 (degree <3) (basically a [dimension]-cube)
@@ -68,7 +70,7 @@ def test_multipoly_term_to_index(max_degree,dimension):
 
 ####################################################################################
 
-
+# maybe change this to a bunch of assert statements
 def testing():
     all_tests_passed = True
 

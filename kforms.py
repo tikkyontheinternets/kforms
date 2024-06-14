@@ -1,66 +1,82 @@
 import math
 
 
-# TODO change the in-place operations into ones that return new objects?
 
+
+# TODO change the in-place operations into ones that return new objects?
+# assertions to add maybe: TODO
+    # coefficient with largest index is always nonzero?
+    # coefficients are sorted by degree?
 class MultiPoly:
     def __init__(self, num_variables):
-        self.num_variables = num_variables
-        self.coefficients = [0]
+        self.num_variables = num_variables #TODO add the ability to add more vars later? or at least to add this to a larger poly
+        self.coefficients = []
         self.max_degree = 0
 
     # TODO
     def __str__(self):
         return str(self.coefficients)
 
-# TODO test getter and setter here
+    #TODO
+    # assumption: the elements of self.coefficients are sorted by degree (I think I coded it like that)
+    def update_degree(self):
+        if len(self.coefficients) > 0:
+            self.max_degree = degree(multipoly_index_to_term(self.num_variables, len(self.coefficients)-1)
+        else:
+            self.max_degree = 0
+
+    # TODO test getter and setter here
 
     # TODO
-    # note: maybe have it such that unless the entire polynomial is zero, the entry with the largest index is always nonzero?  
-    def set_coef(self, value,exponents):
+    # note: maybe have it such that unless the entire polynomial is zero, the entry with the largest index is always nonzero? 
+    # general concept:
+        # if we're setting the largest index to 0, we should shrink the list.
+        # if we're setting something to a nonzero value that's OUTSIDE the current list, we should grow the list.
+        # if we're setting something to zero that's outside teh current list, we do nothing.
+    def set_coef(self, value, exponents):
         # do multipoly_term_to_index(exponents)
-        index = multipoly_term_to_index(self.num_variables,exponents)
-        degree = 0
-        for exponent_index in range(len(exponents)):
-            degree += exponents[exponent_index]
-
-        # if value is nonzero:
-        #   ask if the new index is inside the current array
-        #   if not, expend the array to include this
-        if value != 0:
-            if self.max_degree < degree:
-                self.max_degree = degree
-            if index+1 <= len(self.coefficients):
-                self.coefficients[index] = value
+        target_index = multipoly_term_to_index(self.num_variables,exponents)
+        degree = degree(exponents)
+        
+        if value == 0:
+            # it's outside the current list
+            if target_index >= len(self.coefficients):
+                pass # do nothing
+            # it's the largest nonzero element
+            elif target_index == len(self.coefficients)-1: 
+                # find largest nonzero element beneath the last one
+                # shrink to there
+                self.coefficients.pop()
+                index = len(self.coefficients)-1
+                while self.coefficients[index] == 0 and index >= 0:
+                    self.coefficients.pop()
+                    if index == 0:
+                        break
+                    index -= 1
+            # it's inside the existing list
+            else: 
+                self.coefficients[target_index] = value
+        else: # the value is nonzero
+            # it's outside the current list
+            if target_index >= len(self.coefficients):
+                # expand the list to there
+                while len(self.coefficients)-1 < target_index:
+                    self.coefficients.append(0)
+                self.coefficients[target_index] = value
+            # it's inside the current list
             else:
-                #expand
-                new_index = len(self.coefficients)
-                while new_index <= index:
-                    if new_index == index:
-                        self.coefficients.append(value)
-                    else:
-                        self.coefficients.append(0)
-                    new_index += 1
-
-        # if value is zero:
-        #   if inside current array:
-        #     figure out if it's the highest nonzero entry, maybe shrink the array
-        #     if it's not the highest nonzero entry, do nothing
-        #   if not inside current array:
-        #     do nothing lol
-        else:
-            if index+1 <= len(self.coefficients):
-                #figure out if highest nonzero entry
-                # TODO
-
-                pass
-            else:
-                pass
+                self.coefficients[target_index] = value
+        
+        # call update_degree TODO
+        # TODO: possibly check if we only need to do update_degree in certain cases:
+            # is the largest nonzero element always the one with the largest degree?
+            # are the elements actually SORTED by degree?? I think so???
+        self.update_degree()
 
     # TODO        
     def get_coef(self, exponents):
         index = multipoly_term_to_index(self.num_variables, exponents)
-        if len(self.coefficients) <= index+1:
+        if len(self.coefficients) < index+1:
             return 0
         else:
             return self.coefficients[index]
@@ -100,6 +116,12 @@ def n_simplex_number(number_of_dimensions,side_length):
     denominator = math.factorial(number_of_dimensions)
     return numerator/denominator
 
+def degree(exponents):
+    sum = 0
+    for i in range(len(exponents)):
+        sum += exponents[i]
+    return sum
+
 # TODO
 # take in an array of exponents and spit out the index in the multipoly array their coefficient would appear at
 # dimension: the num of variables in the multivariable polynomial
@@ -114,10 +136,7 @@ def multipoly_term_to_index(dimension, exponents):
         return 0
 
     # compute the degree of this term
-    degree = 0
-    for i in range(len(exponents)):
-        degree += exponents[i]
-
+    degree = degree(exponents)
     # figure out how many entries there are "beneath" it in the simplex (using n_simplex_number)
     entries_before_this = n_simplex_number(dimension,degree)
 
@@ -126,6 +145,7 @@ def multipoly_term_to_index(dimension, exponents):
     final_index = entries_before_this + multipoly_term_to_index(dimension-1,exponents)
 
     return final_index
+
 
 # TODO
 # take in a number representing an index in a multipoly array, and spit out an array of exponents from the term that coefficient comes with.
