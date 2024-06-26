@@ -21,7 +21,7 @@ class MultiPoly:
     # assumption: the elements of self.coefficients are sorted by degree (I think I coded it like that)
     def update_degree(self):
         if len(self.coefficients) > 0:
-            self.max_degree = degree(multipoly_index_to_term(self.num_variables, len(self.coefficients)-1)
+            self.max_degree = degree(multipoly_index_to_term(self.num_variables, len(self.coefficients)-1))
         else:
             self.max_degree = 0
 
@@ -136,9 +136,9 @@ def multipoly_term_to_index(dimension, exponents):
         return 0
 
     # compute the degree of this term
-    degree = degree(exponents)
+    degree_of_term = degree(exponents)
     # figure out how many entries there are "beneath" it in the simplex (using n_simplex_number)
-    entries_before_this = n_simplex_number(dimension,degree)
+    entries_before_this = n_simplex_number(dimension,degree_of_term)
 
     # recurse on just the "side" it's on 
     exponents.pop(0)
@@ -153,6 +153,16 @@ def multipoly_term_to_index(dimension, exponents):
 # index: a nonnegative integer, the index of the desired term.
 def multipoly_index_to_term(dimension, index):
     return []
+    # (see notebook)
+    # find the "simplex coordinates" of this index, i.e. for dimension=3 and index=11:
+        # 11          is in the 4th 2-simplex
+        # (11-10)     is in the 2nd 1-simplex
+        # ((11-10)-1) is in the 1st 0-simplex
+    # then:
+        # 4th 2-simplex -> sum of coords {0,1,2} is 3
+        # 2nd 1-simplex -> sum of coords {1,2}   is 1
+        # 1st 0-simplex -> sum of coords {2}     is 0
+    # so, 11 maps to [2,1,0].
 
 # KForms are made up of variables. The variables start at ZERO.
 class KForm:
