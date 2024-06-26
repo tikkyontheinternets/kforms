@@ -15,7 +15,28 @@ class MultiPoly:
 
     # TODO
     def __str__(self):
+        result = ""
+        if self.coefficients == []:
+            return "0"
+        coef_index = 0
+        while self.coefficients[coef_index] == 0:
+            coef_index += 1
+            # assumes: will find a nonzero entry
+        result = result.append(self.term_to_string(multipoly_index_to_term(self.num_variables, coef_index))) #TODO must finish index_to_term first
+        for coef_index in range(len(self.coefficients)):
+            if self.coefficients[coef_index] != 0:
+
         return str(self.coefficients)
+
+    # term is a nonempty array of integers representing the exponents on this term
+    # returns a string representation of this term (with no coefficient)
+    def term_to_string(self,term):
+        result = "(x_0^"
+        result = result + str(term[0]) + ")"
+        for exponent_index in range(1,len(term)):
+            result = result + "*(x_" + str(exponent_index) + "^" + str(term[exponent_index]) + ")"
+        return result
+
 
     #TODO
     # assumption: the elements of self.coefficients are sorted by degree (I think I coded it like that)
@@ -36,7 +57,7 @@ class MultiPoly:
     def set_coef(self, value, exponents):
         # do multipoly_term_to_index(exponents)
         target_index = multipoly_term_to_index(self.num_variables,exponents)
-        degree = degree(exponents)
+        #degree = degree(exponents)
         
         if value == 0:
             # it's outside the current list
@@ -144,7 +165,7 @@ def multipoly_term_to_index(dimension, exponents):
     exponents.pop(0)
     final_index = entries_before_this + multipoly_term_to_index(dimension-1,exponents)
 
-    return final_index
+    return int(final_index)
 
 
 # TODO

@@ -41,7 +41,7 @@ def get_n_simplex_of_exponents(max_degree, dimension):
 
 def test_multipoly_term_to_index(max_degree,dimension):
     all_exponent_combos = get_n_simplex_of_exponents(max_degree,dimension) 
-    print(all_exponent_combos)
+    #print(all_exponent_combos)
 
     # check the size of all_exponent_combos
     # make a new list of indices of exponents
@@ -52,6 +52,7 @@ def test_multipoly_term_to_index(max_degree,dimension):
     for combo in all_exponent_combos:
         index_list.append(kforms.multipoly_term_to_index(dimension, combo.copy()))
 
+    """
     # for my sake:
     for index_to_print in range(len(all_exponent_combos)):
         # search through index_list until we find index_to_print
@@ -61,7 +62,7 @@ def test_multipoly_term_to_index(max_degree,dimension):
             index_index +=1
             # assume we'll find it eventually LOL
         print(str(all_exponent_combos[index_index]) + " -> " + str(index_list[index_index]))
-
+    """
     for index_to_find in range(len(all_exponent_combos)):
         found_this_index = False
         for index in range(len(index_list)):
@@ -94,5 +95,9 @@ else:
     print("a test failed!")
 
 
+my_poly = kforms.MultiPoly(3)
 
+my_poly.set_coef(1,[1,1,1])
+
+print(my_poly)
 
